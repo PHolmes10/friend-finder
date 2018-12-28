@@ -16,23 +16,37 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
 if (err) {
   console.error("error connecting: " + err.stack);
-  //once successfully connected, you may want to query your database for the info you'll need later!
-}
+} 
+// connection.query("SELECT * FROM profiles")
+});
+module.exports = function(app){
+app.get("/api/friends", function (req, res) {
+    return res.json(friends);
 });
 
-app.get("/api/tables", function (req, res) {
-    // return res.json(reservations);
-});
+// app.post("/api/tables", function (req, res) {
+//     // // req.body hosts is equal to the JSON post sent from the user
+//     // var newReservation = req.body;
 
-app.post("/api/tables", function (req, res) {
-    // // req.body hosts is equal to the JSON post sent from the user
-    // var newReservation = req.body;
+//     // if (reservations.length < 5) {
+//     //     reservations.push(newReservation);
+//     //     res.json(newReservation);
+//     // } else {
+//     //     waitList.push(newReservation);
+//     //     res.json(null)
+//     // }
+// });
+};
 
-    // if (reservations.length < 5) {
-    //     reservations.push(newReservation);
-    //     res.json(newReservation);
-    // } else {
-    //     waitList.push(newReservation);
-    //     res.json(null)
-    // }
-});
+
+function loadProfiles() {
+    // Selects all of the data from the MySQL profiles table
+    connection.query("SELECT * FROM profiles", function(err, res) {
+      if (err) throw err;
+      //a fun trick for converting mysql's returned 'rowPacketData' obj into more usable JSON
+      var data = JSON.stringify(res);
+      data = JSON.parse(data);
+      // loop over your data converting the string of numbers into an array (using split??)
+      friends = data;
+    });
+  }
