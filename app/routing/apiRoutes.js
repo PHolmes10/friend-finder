@@ -34,17 +34,10 @@ module.exports = function (app) {
     });
 
     app.post("/api/friends", function (req, res) {
-        req.body;
-    //     // // req.body hosts is equal to the JSON post sent from the user
-    //     // var newReservation = req.body;
+        var scores = (req.body.scores).join();
 
-    //     // if (reservations.length < 5) {
-    //     //     reservations.push(newReservation);
-    //     //     res.json(newReservation);
-    //     // } else {
-    //     //     waitList.push(newReservation);
-    //     //     res.json(null)
-    //     // }
+         connection.query("INSERT INTO profiles (name, photo, scores) VALUES (?, ?, ?)", [req.body.name, req.body.photo, scores]);
+
     });
 };
 
