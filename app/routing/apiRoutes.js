@@ -20,6 +20,7 @@ connection.connect(function (err) {
     // connection.query("SELECT * FROM profiles")
 });
 module.exports = function (app) {
+
     app.get("/api/friends", function (req, res) {
         connection.query("SELECT * FROM profiles", function (err, result) {
             if (err) throw err;
@@ -27,16 +28,13 @@ module.exports = function (app) {
             data = JSON.parse(data);
             for (i = 0; i < data.length; i++) {
                 data[i].scores = data[i].scores.split(",").map(Number);
-                console.log(data[i].scores);
             }
             return res.json(data);
-
-            
         });
-
     });
 
-    // app.post("/api/friends", function (req, res) {
+    app.post("/api/friends", function (req, res) {
+        req.body;
     //     // // req.body hosts is equal to the JSON post sent from the user
     //     // var newReservation = req.body;
 
@@ -47,7 +45,7 @@ module.exports = function (app) {
     //     //     waitList.push(newReservation);
     //     //     res.json(null)
     //     // }
-    // });
+    });
 };
 
 
