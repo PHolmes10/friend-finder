@@ -17,7 +17,7 @@ connection.connect(function (err) {
     if (err) {
         console.error("error connecting: " + err.stack);
     }
-   console.log("Connected as id: " + connection.threadId);
+    console.log("Connected as id: " + connection.threadId);
 });
 
 module.exports = function (app) {
@@ -36,8 +36,19 @@ module.exports = function (app) {
 
     app.post("/api/friends", function (req, res) {
         var scores = (req.body.scores).join();
+        console.log(scores);
 
-         connection.query("INSERT INTO profiles (name, photo, scores) VALUES (?, ?, ?)", [req.body.name, req.body.photo, scores]);
+        connection.query("SELECT * FROM profiles", function (err, res) {
+            var data = JSON.stringify(res);
+            data = JSON.parse(data);
+
+            for (i = 0; i < data.length; i++){
+                console.log(data[i].scores);
+            }
+            
+        })
+
+        connection.query("INSERT INTO profiles (name, photo, scores) VALUES (?, ?, ?)", [req.body.name, req.body.photo, scores]);
 
     });
 };
