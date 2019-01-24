@@ -17,8 +17,9 @@ connection.connect(function (err) {
     if (err) {
         console.error("error connecting: " + err.stack);
     }
-    // connection.query("SELECT * FROM profiles")
+   console.log("Connected as id: " + connection.threadId);
 });
+
 module.exports = function (app) {
 
     app.get("/api/friends", function (req, res) {
@@ -40,16 +41,3 @@ module.exports = function (app) {
 
     });
 };
-
-
-function loadProfiles() {
-    // Selects all of the data from the MySQL profiles table
-    connection.query("SELECT * FROM profiles", function (err, res) {
-        if (err) throw err;
-
-        var data = JSON.stringify(res);
-        data = JSON.parse(data);
-        // loop over your data converting the string of numbers into an array (using split??)
-        friends = data;
-    });
-}

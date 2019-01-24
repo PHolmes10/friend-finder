@@ -160,7 +160,7 @@
     <hr>
     <footer class="footer">
       <div class="container">
-        <p><a href="/api/friends">API Friends List</a> | <a href="#">GitHub Repo</a></p>
+        <p><a href="/api/friends">API Friends List</a> | <a href="https://github.com/PHolmes10/friend-finder">GitHub Repo</a></p>
       </div>
     </footer>
 
@@ -178,7 +178,7 @@
         </div>
         <div class="modal-body">
           <h2 id="match-name"></h2>
-          <img id="match-img" src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/6/005/064/1bd/3435aa3.jpg" alt="">
+          <img id="match-img" src="" alt="">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -251,17 +251,17 @@
             $("#q10").val()
           ]
         };
-
         // AJAX post the data to the friends API.
         $.post("/api/friends", userData, function(data) {
 
           // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+          console.log('posted');
           $("#match-name").text(data.name);
           $("#match-img").attr("src", data.photo);
-
+          console.log('posted');
           // Show the modal with the best match
           $("#results-modal").modal("toggle");
-
+          console.log('posted');
         });
       } else {
         alert("Please fill out all fields before submitting!");
