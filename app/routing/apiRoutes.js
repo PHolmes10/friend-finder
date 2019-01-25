@@ -36,32 +36,62 @@ module.exports = function (app) {
     });
 
     app.post("/api/friends", function (req, res) {
+        // console.log('we got the route!!!', req.body)
         var user = (req.body.scores).join();
         // console.log(scores);
-        connection.query("SELECT * FROM profiles", function (err, res) {
-            var data = JSON.stringify(res);
-            data = JSON.parse(data);
-            // console.log(data)
-            // var match = {
-            //     matchName:  "",
-            //     matchPhoto:  "",
-            //     difference: 100
-            // }
-            
-            var difference = 0;
+        connection.query("SELECT * FROM profiles", function (err, stuffWeGotBack) {
 
-            for (i = 0; i < data.length; i++) {
-                // console.log(data)
-                for (j = 0; j < data[i].scores.length; j++) {
-                    // console.log(j);
-                    difference = Math.abs(data[i].scores[j] - user[j]);
-                    console.log(difference);
-                };
-                
+            // console.log('we got this back from DB!!', stuffWeGotBack);
+            // var data = JSON.stringify(stuffWeGotBack);
+            // data = JSON.parse(data);
+            // console.log(data)
+            var match = {
+                matchName: "",
+                matchPhoto: "",
+                difference: 100
             }
+
+            var saveTotal = 0
+
+            for (var i = 0; i < req.body.scores.length; i++) {
+                saveTotal += parseInt(req.body.scores)
+            }
+            // console.log('this is our saveTotal', saveTotal);
+
+
+            var closestDifference = 10000
+            for (var k = 0; k < stuffWeGotBack.length; k++) {
+                console.log('new dude total', saveTotal)
+                console.log('compare dude totatl', stuffWeGotBack[k].totalscore);
+                var difference = saveTotal - stuffWeGotBack[k].totalscore
+                if (Math.abs(difference) < closestDifference) {
+                    match = stuffWeGotBack[k]
+                }
+            }
+
+            // res.json(match)
+            // var difference = 0;
+
+            // for (i = 0; i < data.length; i++) {
+            //     // console.log(data)
+            //     for (j = 0; j < data[i].scores.length; j++) {
+            //         // console.log(data[i].scores);
+            //         difference = Math.abs(data[i].scores[j] - user[j]);
+            //         // console.log(difference);
+            //     };
+
+            // }
+            res.json(match)
         })
 
-        connection.query("INSERT INTO profiles (name, photo, scores) VALUES (?, ?, ?)", [req.body.name, req.body.photo, req.body.scores.join()]);
+        var saveTotal = 0
+
+        for (var i = 0; i < req.body.scores.length; i++) {
+            saveTotal += parseInt(req.body.scores)
+        }
+        console.log('this is our saveTotal down right before we save', saveTotal);
+
+        connection.query("INSERT INTO profiles (name, photo, totalscore) VALUES (?, ?, ?)", [req.body.name, req.body.photo, saveTotal]);
 
     });
 };
